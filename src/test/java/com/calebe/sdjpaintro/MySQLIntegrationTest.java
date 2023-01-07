@@ -1,8 +1,10 @@
 package com.calebe.sdjpaintro;
 
 import com.calebe.sdjpaintro.domain.AuthorUuid;
+import com.calebe.sdjpaintro.domain.BookNatural;
 import com.calebe.sdjpaintro.domain.BookUuid;
 import com.calebe.sdjpaintro.repositories.AuthorUuidRepository;
+import com.calebe.sdjpaintro.repositories.BookNaturalRepository;
 import com.calebe.sdjpaintro.repositories.BookRepository;
 import com.calebe.sdjpaintro.repositories.BookUuidRepository;
 import org.junit.jupiter.api.Order;
@@ -29,6 +31,19 @@ public class MySQLIntegrationTest {
 
     @Autowired
     BookUuidRepository bookUuidRepository;
+
+    @Autowired
+    BookNaturalRepository bookNaturalRepository;
+
+    @Test
+    void testBookNatural() {
+        BookNatural bookNatural = new BookNatural();
+        bookNatural.setTitle("My Book");
+        BookNatural saved = bookNaturalRepository.save(bookNatural);
+
+        BookNatural fetched = bookNaturalRepository.getReferenceById(saved.getTitle());
+        assertThat(fetched).isNotNull();
+    }
 
     @Test
     void testAuthorUuid() {
