@@ -4,6 +4,7 @@ import com.calebe.sdjpaintro.domain.AuthorUuid;
 import com.calebe.sdjpaintro.domain.BookNatural;
 import com.calebe.sdjpaintro.domain.BookUuid;
 import com.calebe.sdjpaintro.domain.composite.AuthorComposite;
+import com.calebe.sdjpaintro.domain.composite.AuthorEmbedded;
 import com.calebe.sdjpaintro.domain.composite.NameId;
 import com.calebe.sdjpaintro.repositories.*;
 import org.junit.jupiter.api.Order;
@@ -36,6 +37,21 @@ public class MySQLIntegrationTest {
 
     @Autowired
     AuthorCompositeRepository authorCompositeRepository;
+
+    @Autowired
+    AuthorEmbeddedRepository authorEmbeddedRepository;
+
+    @Test
+    void authorEmbeddedTest() {
+        NameId nameId = new NameId("Calebe", "Oliveira");
+        AuthorEmbedded authorEmbedded = new AuthorEmbedded(nameId);
+
+        AuthorEmbedded savedAuthor = authorEmbeddedRepository.save(authorEmbedded);
+        assertThat(savedAuthor).isNotNull();
+
+        AuthorEmbedded fetchedAuthor = authorEmbeddedRepository.getReferenceById(nameId);
+        assertThat(fetchedAuthor).isNotNull();
+    }
 
     @Test
     void authorCompositeTest() {
