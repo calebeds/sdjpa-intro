@@ -3,10 +3,9 @@ package com.calebe.sdjpaintro;
 import com.calebe.sdjpaintro.domain.AuthorUuid;
 import com.calebe.sdjpaintro.domain.BookNatural;
 import com.calebe.sdjpaintro.domain.BookUuid;
-import com.calebe.sdjpaintro.repositories.AuthorUuidRepository;
-import com.calebe.sdjpaintro.repositories.BookNaturalRepository;
-import com.calebe.sdjpaintro.repositories.BookRepository;
-import com.calebe.sdjpaintro.repositories.BookUuidRepository;
+import com.calebe.sdjpaintro.domain.composite.AuthorComposite;
+import com.calebe.sdjpaintro.domain.composite.NameId;
+import com.calebe.sdjpaintro.repositories.*;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,24 @@ public class MySQLIntegrationTest {
 
     @Autowired
     BookNaturalRepository bookNaturalRepository;
+
+    @Autowired
+    AuthorCompositeRepository authorCompositeRepository;
+
+    @Test
+    void authorCompositeTest() {
+        NameId nameId = new NameId("Calebe", "Oliveira");
+        AuthorComposite authorComposite = new AuthorComposite();
+        authorComposite.setFirstName(nameId.getFirstName());
+        authorComposite.setLastName(nameId.getLastName());
+        authorComposite.setCountry("BR");
+
+        AuthorComposite savedAuthor = authorCompositeRepository.save(authorComposite);
+        assertThat(savedAuthor).isNotNull();
+
+        AuthorComposite fetchedAuthor = authorCompositeRepository.getReferenceById(nameId);
+        assertThat(fetchedAuthor).isNotNull();
+    }
 
     @Test
     void testBookNatural() {
